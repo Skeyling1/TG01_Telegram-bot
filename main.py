@@ -8,7 +8,7 @@ dp = Dispatcher()
 
 @dp.message(CommandStart)
 async def start(message: Message):
-    await message.answer()
+    await message.answer('Приветики! Я бот!')
 
 
 async def main():
