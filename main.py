@@ -4,6 +4,8 @@ from aiogram.filters import CommandStart, Command
 from aiogram.types import Message
 from config import TOKEN
 import random
+import requests
+
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
@@ -19,6 +21,17 @@ async def react_photo(message: Message):
     list = ['Ого какая фотка!', 'непонятно что это', 'не отправляй такое больше!']
     rand_answ = random.choice(list)
     await message.answer(rand_answ)
+
+@dp.message(Command('weather'))
+async def weather(message: Message):
+    city = 'London'
+    api_key = "ваш токен"
+    url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&APPID={api_key}&units=metric"
+    request = requests.get(url)
+    weather = request.json()
+    temp = str(weather['main']['temp'])
+    await message.answer(f"Температура в городе {city} составляет {temp} °C")
+
 
 @dp.message(F.text == "Что такое ИИ?")
 async def ai_text(message: Message):
