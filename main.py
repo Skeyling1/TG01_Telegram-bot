@@ -16,11 +16,13 @@ async def photo(message: Message):
     rand_photo = random.choice(list)
     await message.answer_photo(photo=rand_photo, caption='это супер крутая картинка')
 
+
 @dp.message(F.photo)
 async def react_photo(message: Message):
     list = ['Ого какая фотка!', 'непонятно что это', 'не отправляй такое больше!']
     rand_answ = random.choice(list)
     await message.answer(rand_answ)
+
 
 @dp.message(Command('weather'))
 async def weather(message: Message):
@@ -42,9 +44,15 @@ async def ai_text(message: Message):
 async def help(message: Message):
     await message.answer('Этот бот умеет выполнять команды: \n /start \n /help \n /photo \n /weather')
 
-@dp.message(CommandStart)
+
+@dp.message(CommandStart())
 async def start(message: Message):
     await message.answer('Приветики! Я бот!')
+
+
+@dp.message()
+async def any_mes(message: Message):
+    await message.answer('я тебе ответил')
 
 
 async def main():
