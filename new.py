@@ -65,7 +65,7 @@ async def city(message: Message, state: FSMContext):
     conn = sqlite3.connect('user_data.db')
     cur = conn.cursor()
     cur.execute('''
-            INSERT INTO (name, age, city) VALUES (?, ?, ?)''', (user_data['name'], user_data['age'], user_data['city']))
+            INSERT INTO users (name, age, city) VALUES (?, ?, ?)''', (user_data['name'], user_data['age'], user_data['city']))
     conn.commit()
     conn.close()
 
@@ -75,7 +75,20 @@ async def city(message: Message, state: FSMContext):
                 weather_data = await response.json()
                 main = weather_data['main']
                 weather = weather_data['weather']['0']
-                
+
+                temperature = main['temp']
+                humidity = main['hunidity']
+                description = weather['description']
+
+                weather_report = (f'Город - {user_data["city"]}\n'
+                                  f'Температура - {temperature}\n'
+                                  f'Влажность воздуха - {humidity}\n'
+                                  f'Описание погоды - {description}\n')
+                await message.answer(weather_report)
+            else:
+                await message.answer('НЕ УДАЛОСЬ ПОЛУЧИТЬ ДАННЫЕ О ПОГОДЕ')
+    await state.clear()
+
 
 
 
