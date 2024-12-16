@@ -5,7 +5,7 @@ from aiogram.types import Message, FSInputFile
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.storage.memory import MemoryStorage
-from config import TOKEN
+from config import TOKEN, WEATHER_API_KEY
 import sqlite3
 import aiohttp
 import logging
@@ -68,6 +68,17 @@ async def city(message: Message, state: FSMContext):
             INSERT INTO (name, age, city) VALUES (?, ?, ?)''', (user_data['name'], user_data['age'], user_data['city']))
     conn.commit()
     conn.close()
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(f"http://api.openweathermap.org/data/2.5/weather?q={user_data['city']}&APPID={WEATHER_API_KEY}&units=metric") as response:
+            if response.status == 200:
+                weather_data = await response.json()
+                main = weather_data['main']
+                weather = weather_data['weather']['0']
+                
+
+
+
 
 async def main():
     await dp.start_polling(bot)
