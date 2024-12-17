@@ -74,10 +74,10 @@ async def city(message: Message, state: FSMContext):
             if response.status == 200:
                 weather_data = await response.json()
                 main = weather_data['main']
-                weather = weather_data['weather']['0']
+                weather = weather_data['weather'][0]
 
                 temperature = main['temp']
-                humidity = main['hunidity']
+                humidity = main['humidity']
                 description = weather['description']
 
                 weather_report = (f'Город - {user_data["city"]}\n'
@@ -96,5 +96,5 @@ async def city(message: Message, state: FSMContext):
 async def main():
     await dp.start_polling(bot)
 
-asyncio.run(main())
-# if __name__ =='__main__':
+if __name__ =='__main__':
+    asyncio.run(main())
