@@ -1,13 +1,14 @@
 import asyncio
 from aiogram import Bot, Dispatcher, F
 from aiogram.filters import CommandStart, Command
-from aiogram.types import Message, FSInputFile
+from aiogram.types import Message, FSInputFile, CallbackQuery
 from config import TOKEN
 import random
 import requests
 from gtts import gTTS
 import os
 from googletrans import Translator
+import keyboards as kb
 
 
 translator = Translator()
@@ -95,9 +96,21 @@ async def help(message: Message):
     await message.answer('Этот бот умеет выполнять команды: \n /start \n /help \n /photo \n /weather')
 
 
+@dp.message(F.text == "Тестовая кнопка 1")
+async def test_button(message: Message):
+   await message.answer('Обработка нажатия на reply кнопку')
+
+
+@dp.callback_query(F.data == "news")
+async def news(callback: CallbackQuery):
+    await callback.answer("загрузка новостей", show_alert=True)
+    await callback.message.answer('Вот свежие новости')
+
+
+
 @dp.message(CommandStart())
 async def start(message: Message):
-    await message.answer(f'Приветики, {message.from_user.first_name}')
+    await message.answer(f'Приветики, {message.from_user.first_name}', reply_markup=kb.inline_kb_test)
 
 
 @dp.message()
