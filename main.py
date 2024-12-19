@@ -96,21 +96,55 @@ async def help(message: Message):
     await message.answer('Этот бот умеет выполнять команды: \n /start \n /help \n /photo \n /weather')
 
 
-@dp.message(F.text == "Тестовая кнопка 1")
-async def test_button(message: Message):
-   await message.answer('Обработка нажатия на reply кнопку')
+# @dp.callback_query(F.data == "news")
+# async def news(callback: CallbackQuery):
+#     await callback.answer("загрузка новостей", show_alert=True)
+#     await callback.message.edit_text('Вот свежие новости', reply_markup=await kb.test_keyboard())
 
 
-@dp.callback_query(F.data == "news")
+@dp.message(Command('links'))
+async def start(message: Message):
+    await message.answer('Доступные ссылки:', reply_markup=kb.inline_kb_test)
+
+
+@dp.message(Command('dynamic'))
+async def start(message: Message):
+    await message.answer('больше кнопок?', reply_markup=kb.inline_dynamic)
+
+
+@dp.callback_query(F.data == "show_more_buttons")
 async def news(callback: CallbackQuery):
-    await callback.answer("загрузка новостей", show_alert=True)
-    await callback.message.answer('Вот свежие новости')
-
+    await callback.message.edit_text('Новые кнопки', reply_markup=await kb.test_keyboard())
 
 
 @dp.message(CommandStart())
 async def start(message: Message):
-    await message.answer(f'Приветики, {message.from_user.first_name}', reply_markup=kb.inline_kb_test)
+    await message.answer('Меню', reply_markup=kb.inline_hi_bye)
+
+
+@dp.callback_query(F.data == "hi")
+async def hi(callback: CallbackQuery):
+    await callback.message.answer(f'Привет, {callback.from_user.first_name}!')
+
+
+@dp.callback_query(F.data == "bye")
+async def bye(callback: CallbackQuery):
+    await callback.message.answer(f'До свидания, {callback.from_user.first_name}!')
+
+
+@dp.callback_query(F.data == "option1")
+async def option_1(callback: CallbackQuery):
+    await callback.message.answer('Опция 1')
+
+
+@dp.callback_query(F.data == "option2")
+async def option_2(callback: CallbackQuery):
+    await callback.message.answer('Опция 2')
+
+
+@dp.message(F.text == "Тестовая кнопка 1")
+async def test_button(message: Message):
+    await message.answer('Обработка нажатия на reply кнопку')
 
 
 @dp.message()
