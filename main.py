@@ -78,7 +78,7 @@ async def react_photo(message: Message):
 @dp.message(Command('weather'))
 async def weather(message: Message):
     city = 'London'
-    api_key = "ваш токен"
+    api_key = "WEATHER_API_KEY"
     url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&APPID={api_key}&units=metric"
     request = requests.get(url)
     weather = request.json()
