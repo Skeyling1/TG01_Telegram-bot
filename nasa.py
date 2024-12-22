@@ -32,16 +32,6 @@ async def random_apod(message: Message):
 
 
 
-
-
-
-
-
-
-
-
-
-
 async def main():
    await dp.start_polling(bot)
 
